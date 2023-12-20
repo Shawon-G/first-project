@@ -36,7 +36,8 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 });
 
 const studentSchema = new Schema<Student>({
-  id: { type: String },
+  id: { type: String, required: true, unique: true },
+  // Note:  Duplicate ID off korar jonno ei unique validation
   name: {
     type: userNameSchema,
     required: true,
@@ -50,7 +51,7 @@ const studentSchema = new Schema<Student>({
     required: true,
   }, // Note: eta ke enam type bole mongoDB te with Custom validation.
   dateOfBirth: { type: String },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true }, // Unique Validation
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
