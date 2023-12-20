@@ -33,19 +33,39 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 
 const studentSchema = new Schema<Student>({
   id: { type: String },
-  name: userNameSchema,
-  gender: ['male', 'female'], // Note: eta ke enam type bole mongoDB te
+  name: {
+    type: userNameSchema,
+    required: true,
+  }, // Note: User Name Schema keo built in diye Validate kore dilam.
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'other'],
+    required: true,
+  }, // Note: eta ke enam type bole mongoDB te with built in validation
   dateOfBirth: { type: String },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
-  bloodGroup: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], // Enam type
+  bloodGroup: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  }, // Enam type with built in validation
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
+  guardian: {
+    type: guardianSchema,
+    required: true,
+  }, // Note: guardian Schema keo built in diye Validate kore dilam.
+  localGuardian: {
+    type: localGuardianSchema,
+    required: true,
+  }, // Note: local guardian Schema keo built in diye Validate kore dilam.
   profileImg: { type: String },
-  isActive: ['active', 'blocked'], // Enam type
+  isActive: {
+    type: String,
+    enum: ['active', 'blocked'],
+    default: 'active',
+  }, // Enam type with built in validation
 });
 
 // Modeling:--------------------------------------------------------
