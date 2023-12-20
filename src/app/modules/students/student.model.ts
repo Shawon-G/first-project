@@ -13,6 +13,7 @@ const userNameSchema = new Schema<UserName>({
   firstName: {
     type: String,
     required: [true, 'First Name Lagbei Lagbe'],
+    trim: true, // Note: code er samne - pichon e space thakle seta remove kore debe. Built in Validation.
   }, // Note: custom validation with self own error message.
   middleName: { type: String },
   lastName: { type: String, required: [true, 'Last Name Lagbei Lagbe'] },
