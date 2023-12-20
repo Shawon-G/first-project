@@ -1,6 +1,7 @@
 //  Note: ei file e Schema ebong Model ache....
 
 import { Schema, model } from 'mongoose';
+import validator from 'validator';
 import {
   Guardian,
   LocalGuardian,
@@ -14,6 +15,10 @@ const userNameSchema = new Schema<UserName>({
     type: String,
     required: [true, 'First Name Lagbei Lagbe'],
     trim: true, // Note: code er samne - pichon e space thakle seta remove kore debe. Built in Validation.
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: '{VALUE} is not valid',
+    },
   }, // Note: custom validation with self own error message.
   middleName: { type: String },
   lastName: { type: String, required: [true, 'Last Name Lagbei Lagbe'] },
@@ -52,7 +57,15 @@ const studentSchema = new Schema<Student>({
     required: true,
   }, // Note: eta ke enam type bole mongoDB te with Custom validation.
   dateOfBirth: { type: String },
-  email: { type: String, required: true, unique: true }, // Unique Validation
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: '{VALUE} is not valid email type',
+    },
+  }, // Unique Validation
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
