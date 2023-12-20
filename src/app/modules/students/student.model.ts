@@ -10,9 +10,13 @@ import {
 
 // Schema:------------------------------------------
 const userNameSchema = new Schema<UserName>({
-  firstName: { type: String, required: true },
+  firstName: {
+    type: String,
+    required: [true, 'First Name Lagbei Lagbe'],
+  }, // Note: custom validation with self own error message.
   middleName: { type: String },
-  lastName: { type: String, required: true },
+  lastName: { type: String, required: [true, 'Last Name Lagbei Lagbe'] },
+  // Note: custom validation with self own error message.
 });
 
 const guardianSchema = new Schema<Guardian>({
@@ -39,9 +43,12 @@ const studentSchema = new Schema<Student>({
   }, // Note: User Name Schema keo built in diye Validate kore dilam.
   gender: {
     type: String,
-    enum: ['male', 'female', 'other'],
+    enum: {
+      values: ['male', 'female', 'other'],
+      message: 'The Gender Field Can Only Be One of the Following',
+    },
     required: true,
-  }, // Note: eta ke enam type bole mongoDB te with built in validation
+  }, // Note: eta ke enam type bole mongoDB te with Custom validation.
   dateOfBirth: { type: String },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
@@ -59,7 +66,7 @@ const studentSchema = new Schema<Student>({
   localGuardian: {
     type: localGuardianSchema,
     required: true,
-  }, // Note: local guardian Schema keo built in diye Validate kore dilam.
+  }, // Note: local guardian Schema keo built in diye Validate kore dilam. Sathe Customise o korlam error messege ke.
   profileImg: { type: String },
   isActive: {
     type: String,
@@ -67,6 +74,8 @@ const studentSchema = new Schema<Student>({
     default: 'active',
   }, // Enam type with built in validation
 });
+
+// NOTE:  Validation gulo requered ase emn object ei use korechi...
 
 // Modeling:--------------------------------------------------------
 const StudentModel = model<Student>('Student', studentSchema);
