@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
 import { StudentServices } from './student.service';
+import studentValidationSchema from './student.validation.zod';
+import { z } from 'zod';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body;
 
-    const result = await StudentServices.createStudentIntoDB(studentData);
+    // Data Validation Using Zod:
+    const zodParseData = studentValidationSchema.parse(studentData);
+
+    const result = await StudentServices.createStudentIntoDB(zodParseData);
     // Note: Will call service function to send this data.
     // Note: ei controller file just application logic handle korbe.
     // NOte: sob business logic ebong MongoDB query service file e thakbe.

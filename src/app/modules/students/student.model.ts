@@ -15,10 +15,10 @@ const userNameSchema = new Schema<UserName>({
     type: String,
     required: [true, 'First Name Lagbei Lagbe'],
     trim: true, // Note: code er samne - pichon e space thakle seta remove kore debe. Built in Validation.
-    validate: {
-      validator: (value: string) => validator.isAlpha(value),
-      message: '{VALUE} is not valid',
-    },
+    // validate: {
+    //   validator: (value: string) => validator.isAlpha(value),
+    //   message: '{VALUE} is not valid',
+    // },
   }, // Note: custom validation with self own error message.
   middleName: { type: String },
   lastName: { type: String, required: [true, 'Last Name Lagbei Lagbe'] },
@@ -51,7 +51,7 @@ const studentSchema = new Schema<Student>({
   gender: {
     type: String,
     enum: {
-      values: ['male', 'female', 'other'],
+      values: ['male', 'female'],
       message: 'The Gender Field Can Only Be One of the Following',
     },
     required: true,
