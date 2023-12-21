@@ -41,53 +41,66 @@ const localGuardianSchema = new Schema<LocalGuardian>({
   address: { type: String, required: true },
 });
 
-const studentSchema = new Schema<Student>({
-  id: { type: String, required: true, unique: true },
-  // Note:  Duplicate ID off korar jonno ei unique validation
-  name: {
-    type: userNameSchema,
-    required: true,
-  }, // Note: User Name Schema keo built in diye Validate kore dilam.
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female'],
-      message: 'The Gender Field Can Only Be One of the Following',
+const studentSchema = new Schema<Student>(
+  {
+    id: { type: String, required: true, unique: true },
+    // Note:  Duplicate ID off korar jonno ei unique validation
+    name: {
+      type: userNameSchema,
+      required: true,
+    }, // Note: User Name Schema keo built in diye Validate kore dilam.
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female'],
+        message: 'The Gender Field Can Only Be One of the Following',
+      },
+      required: true,
+    }, // Note: eta ke enam type bole mongoDB te with Custom validation.
+    dateOfBirth: { type: String },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: (value: string) => validator.isEmail(value),
+        message: '{VALUE} is not valid email type',
+      },
+    }, // Unique Validation
+    contactNo: { type: String, required: true },
+    emergencyContactNo: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    }, // Enam type with built in validation
+    presentAddress: { type: String, required: true },
+    permanentAddress: { type: String, required: true },
+    guardian: {
+      type: guardianSchema,
+      required: true,
+    }, // Note: guardian Schema keo built in diye Validate kore dilam.
+    localGuardian: {
+      type: localGuardianSchema,
+      required: true,
+    }, // Note: local guardian Schema keo built in diye Validate kore dilam. Sathe Customise o korlam error messege ke.
+    profileImg: { type: String },
+    isActive: {
+      type: String,
+      enum: ['active', 'blocked'],
+      default: 'active',
+    }, // Enam type with built in validation
+  },
+  {
+    toJSON: {
+      virtuals: true,
     },
-    required: true,
-  }, // Note: eta ke enam type bole mongoDB te with Custom validation.
-  dateOfBirth: { type: String },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator: (value: string) => validator.isEmail(value),
-      message: '{VALUE} is not valid email type',
-    },
-  }, // Unique Validation
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-  }, // Enam type with built in validation
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
-  guardian: {
-    type: guardianSchema,
-    required: true,
-  }, // Note: guardian Schema keo built in diye Validate kore dilam.
-  localGuardian: {
-    type: localGuardianSchema,
-    required: true,
-  }, // Note: local guardian Schema keo built in diye Validate kore dilam. Sathe Customise o korlam error messege ke.
-  profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ['active', 'blocked'],
-    default: 'active',
-  }, // Enam type with built in validation
+  },
+);
+
+// Vitrual:----------
+studentSchema.virtual('fullname').get(function () {
+  // return this.name.firstName + this.name.middleName + this.name.lastName;
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 // NOTE:  Validation gulo requered ase emn object ei use korechi...
